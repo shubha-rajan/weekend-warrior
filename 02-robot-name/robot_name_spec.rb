@@ -1,7 +1,7 @@
-gem 'minitest', '>= 5.0.0'
-require 'minitest/autorun'
-require 'minitest/pride'
-require_relative 'robot_name'
+gem "minitest", ">= 5.0.0"
+require "minitest/autorun"
+require "minitest/pride"
+require_relative "robot_name"
 
 describe "Robot Name" do
   COMMAND_QUERY = <<-MSG
@@ -18,25 +18,21 @@ describe "Robot Name" do
   end
 
   it "Check that the name sticks" do
-    skip
     robot = Robot.new
-    name  = robot.name
+    name = robot.name
 
     expect(robot.name).must_equal robot.name
     expect(robot.name).must_equal name
   end
 
   it "Check different robots have different names" do
-    skip
     # there is a very, very small probability of name collision here
     # ensuring the name is globally unique is beyond the scope of this exercise
 
     expect(Robot.new.name).wont_equal Robot.new.name
-
   end
 
   it "Check reset name" do
-    skip
     robot = Robot.new
     name = robot.name
 
@@ -46,6 +42,5 @@ describe "Robot Name" do
     expect(name).wont_equal name2
     expect(name2).must_equal robot.name
     expect(name2).must_match NAME_REGEXP
-
   end
 end
