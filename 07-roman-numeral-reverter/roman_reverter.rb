@@ -1,61 +1,26 @@
 module Roman
   VALUES = {
-    "M" => 1000,
-    "D" => 500,
-    "C" => 100,
-    "L" => 50,
-    "X" => 10,
-    "V" => 5,
-    "I" => 1,
+    "M" => { value: 1000, subtractor: "C", subtracts_from: [] },
+    "D" => { value: 500, subtractor: "C", subtracts_from: [] },
+    "C" => { value: 100, subtractor: "X", subtracts_from: ["M", "D"] },
+    "L" => { value: 50, subtractor: "X", subtracts_from: [] },
+    "X" => { value: 10, subtractor: "I", subtracts_from: ["C", "L"] },
+    "V" => { value: 5, subtractor: "I", subtracts_from: [] },
+    "I" => { value: 1, subtractor: nil, subtracts_from: ["V", "X"] },
   }
 
   def self.reverter(s)
     total = 0
-    (0..s.length).each do |index|
-      case s[index]
-      when "M"
-        if (index == 0) || s[index - 1] != "C"
-          total += VALUES["M"]
+    (0...s.length).each do |index|
+      curr_char = s[index]
+      prev_char = s[index - 1]
+      next_char = s[index + 1]
+
+      unless VALUES[curr_char][:subtracts_from].include?(next_char)
+        if (index == 0) || (prev_char != VALUES[curr_char][:subtractor])
+          total += VALUES[curr_char][:value]
         else
-          total += VALUES["M"] - VALUES["C"]
-        end
-      when "D"
-        if (index == 0) || (s[index - 1] != "C")
-          total += VALUES["D"]
-        else
-          total += VALUES["D"] - VALUES["C"]
-        end
-      when "C"
-        if s[index + 1] != "D" && s[index + 1] != "M"
-          if (index == 0) || (s[index - 1] != "X")
-            total += VALUES["C"]
-          else
-            total += VALUES["C"] - VALUES["X"]
-          end
-        end
-      when "L"
-        if (index == 0) || (s[index - 1] != "X")
-          total += VALUES["L"]
-        else
-          total += VALUES["L"] - VALUES["X"]
-        end
-      when "X"
-        if s[index + 1] != "C" && s[index + 1] != "L"
-          if (index == 0) || (s[index - 1] != "I")
-            total += VALUES["X"]
-          else
-            total += VALUES["X"] - VALUES["I"]
-          end
-        end
-      when "V"
-        if (index == 0) || (s[index - 1] != "I")
-          total += VALUES["V"]
-        else
-          total += VALUES["V"] - VALUES["I"]
-        end
-      when "I"
-        if (index == (s.length - 1)) || (s[index + 1] == "I")
-          total += VALUES["I"]
+          total += VALUES[curr_char][:value] - VALUES[prev_char][:value]
         end
       end
     end
