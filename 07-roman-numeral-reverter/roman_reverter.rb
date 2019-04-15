@@ -1,65 +1,61 @@
 module Roman
+  VALUES = {
+    "M" => 1000,
+    "D" => 500,
+    "C" => 100,
+    "L" => 50,
+    "X" => 10,
+    "V" => 5,
+    "I" => 1,
+  }
+
   def self.reverter(s)
     total = 0
-    (0...s.length).each do |index|
+    (0..s.length).each do |index|
       case s[index]
       when "M"
-        if index == 0
-          total += 1000
-        elsif s[index - 1] != "C"
-          total += 1000
+        if (index == 0) || s[index - 1] != "C"
+          total += VALUES["M"]
         else
-          total += 900
+          total += VALUES["M"] - VALUES["C"]
         end
       when "D"
-        if index == 0
-          total += 500
-        elsif s[index - 1] != "C"
-          total += 500
+        if (index == 0) || (s[index - 1] != "C")
+          total += VALUES["D"]
         else
-          total += 400
+          total += VALUES["D"] - VALUES["C"]
         end
       when "C"
         if s[index + 1] != "D" && s[index + 1] != "M"
-          if index == 0
-            total += 100
-          elsif s[index - 1] != "X"
-            total += 100
+          if (index == 0) || (s[index - 1] != "X")
+            total += VALUES["C"]
           else
-            total += 90
+            total += VALUES["C"] - VALUES["X"]
           end
         end
       when "L"
-        if index == 0
-          total += 50
-        elsif s[index - 1] != "X"
-          total += 50
+        if (index == 0) || (s[index - 1] != "X")
+          total += VALUES["L"]
         else
-          total += 40
+          total += VALUES["L"] - VALUES["X"]
         end
       when "X"
         if s[index + 1] != "C" && s[index + 1] != "L"
-          if index == 0
-            total += 10
-          elsif s[index - 1] != "I"
-            total += 10
+          if (index == 0) || (s[index - 1] != "I")
+            total += VALUES["X"]
           else
-            total += 9
+            total += VALUES["X"] - VALUES["I"]
           end
         end
       when "V"
-        if index == 0
-          total += 5
-        elsif s[index - 1] != "I"
-          total += 5
+        if (index == 0) || (s[index - 1] != "I")
+          total += VALUES["V"]
         else
-          total += 4
+          total += VALUES["V"] - VALUES["I"]
         end
       when "I"
-        if index == (s.length - 1)
-          total += 1
-        elsif s[index + 1] == "I"
-          total += 1
+        if (index == (s.length - 1)) || (s[index + 1] == "I")
+          total += VALUES["I"]
         end
       end
     end
